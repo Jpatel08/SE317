@@ -5,8 +5,8 @@ import Accounts.Account;
 public class CheckingsAccount extends Account {
     double dailyDeposit = 0;
     double dailyWithdraw = 0;
-   public CheckingsAccount(int accountNumber, String userName, double balance) {
-        super(accountNumber, userName, balance);
+   public CheckingsAccount(String userName, double balance) {
+        super(userName, balance);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CheckingsAccount extends Account {
        if(dailyWithdraw + amount > 500){
            System.out.println("Cannot withdraw, daily limit reached");
        }
-       else if(this.balance - amount >= 0){
+       else if(this.balance - amount > 0){
            this.balance -= amount;
        }
        else{

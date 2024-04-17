@@ -6,9 +6,9 @@ public class SavingsAccount extends Account{
     double dailyDeposit = 0;
     double dailyTransfer = 0;
 
-    public SavingsAccount(int accountId, String userName, double balance) {
+    public SavingsAccount(String userName, double balance) {
 
-        super(accountId, userName, balance);
+        super(userName, balance);
     }
 
 

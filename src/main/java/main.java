@@ -47,6 +47,7 @@ class Main {
                 break;
             case 2:
                 createAccount();
+                login();
                 break;
             default:
                 System.out.println("Invalid option. Please choose 1 or 2.");
@@ -71,6 +72,7 @@ class Main {
                 System.out.println("enter password");
                 String password = sc.next();
                 authenticateUser(username,password, accountNumber);
+                break;
             case 2:
                 System.out.println("enter account number:");
                 int acctNum = sc.nextInt();
@@ -89,14 +91,14 @@ class Main {
 
     private static boolean authenticateUser(String username, String password, int accountNumber) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("path/to/your/file.txt"));
+
+            List<String> lines = Files.readAllLines(Paths.get("src/userInfo"));
             for (int i = 0; i < lines.size(); i += 4) {
                 if (lines.get(i).equals(username) && lines.get(i + 1).equals(password)) {
-                    // You can also access account numbers here if needed
                     double checkingAccountBalance = Double.parseDouble(lines.get(i + 3));
                     double savingsAccountBalance = Double.parseDouble(lines.get(i + 4));
-                    checkingsAccount = new CheckingsAccount(accountNumber, username,checkingAccountBalance);
-                    savingsAccount = new SavingsAccount(accountNumber, username, savingsAccountBalance);
+                    checkingsAccount = new CheckingsAccount(username,checkingAccountBalance);
+                    savingsAccount = new SavingsAccount(username, savingsAccountBalance);
                     return true;
                 }
             }
@@ -106,15 +108,30 @@ class Main {
         }
         return false;
     }
-    public static void createAccount(){
+    public static void createAccount() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter Username");
+
+        // Collect user information
+        System.out.println("Enter Username:");
         String username = sc.nextLine();
-        System.out.println("enter password");
+        System.out.println("Enter Password:");
         String password = sc.nextLine();
-         util = new Utilities(username, password);
+
+        // Assuming Utilities is a class you have that can generate account numbers
+        util = new Utilities(username, password);
         accountNumber = util.getaccountNumber();
 
+        // Prepare the data string to write to the file
+        String userInfo = username + "\n" + password + "\n" + accountNumber + "\n" + 0.0 + "\n" + 0.0 + "\n";
+
+        try {
+            // Write the new user info to the file, appending to the end of the file
+            Files.write(Paths.get("src/userInfo"), userInfo.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            System.out.println("Account successfully created.");
+        } catch (Exception e) {
+            System.out.println("Failed to write to the file.");
+            e.printStackTrace();
+        }
     }
 
     public static void mainloop(){
@@ -126,6 +143,7 @@ class Main {
             System.out.println("Access Utilities Account (3):");
             System.out.println("New day bruv             (4):");
             int input = sc.nextInt();
+
             switch (input){
                 case 1:
                     checkingMenu();
@@ -148,29 +166,92 @@ class Main {
         System.out.println("Deposit bread  (1):");
         System.out.println("Withdraw bread (2):");
         System.out.println("Transfer       (3):");
+        System.out.println("GET OUT        (4):");
         int choice = sc.nextInt();
         switch (choice){
             case 1:
-                System.out.flush();
-                System.out.println("How much money do you want to deposit bruv?");
-                int amt = sc.nextInt();
-                checkingsAccount.deposit(amt);
+                checkingdeposit();
+
                 break;
             case 2:
-
+                checkingsWithdraw();
                 break;
             case 3:
-
+                transferFromCheckings();
+                break;
+            case 4:
+                mainloop();
                 break;
         }
 
     }
+    public static void transferFromCheckings() {
+        Scanner sc = new Scanner(System.in);
+        System.out.flush();
+        System.out.println("How much money do you want to transfer to savings brothanem");
+        double amt = sc.nextInt();
+        checkingsAccount.transfer(savingsAccount,amt);
+        updateAccountBalances();
+
+    }
+
+    public static void checkingsWithdraw(){
+        Scanner sc = new Scanner(System.in);
+        System.out.flush();
+        System.out.println("How much money do you want to withdraw bruv?");
+        double amt = sc.nextInt();
+        checkingsAccount.withdraw(amt);
+        updateAccountBalances();
+
+    }
+    public static void checkingdeposit(){
+        Scanner sc = new Scanner(System.in);
+        System.out.flush();
+        System.out.println("How much money do you want to deposit bruv?");
+        int amt = sc.nextInt();
+        checkingsAccount.deposit(amt);
+        updateAccountBalances();
+
+    }
 
     public static void savingMenu(){
+        Scanner sc = new Scanner(System.in);
         System.out.flush();
         System.out.println("******Savings Menu bruv******:");
         System.out.println("Savings Balance bruv: " + savingsAccount.getBalance());
+        System.out.println("Deposit bread  (1):");
+        System.out.println("Transfer       (2):");
+        System.out.println("GET OUT        (3):");
+        int choice = sc.nextInt();
+        switch (choice){
+            case 1:
+                savingDeposit();
 
+                break;
+            case 2:
+                transferFromSavings();
+                break;
+            case 3:
+                mainloop();
+                break;
+        }
+
+    }
+    public static void savingDeposit(){
+        Scanner sc = new Scanner(System.in);
+        System.out.flush();
+        System.out.println("How much money do you want to deposit into savings ");
+        double amt = sc.nextInt();
+        savingsAccount.deposit(amt);
+        updateAccountBalances();
+    }
+    public static void transferFromSavings(){
+        Scanner sc = new Scanner(System.in);
+        System.out.flush();
+        System.out.println("How much money do you want to transfer (max 100 per day) ");
+        double amt = sc.nextInt();
+        savingsAccount.transfer(checkingsAccount,amt);
+        updateAccountBalances();
 
     }
     public static void utilitiesMenu(){
@@ -240,6 +321,60 @@ class Main {
                 utilitiesMenu();
                 break;
         }
+    }
+
+    public static boolean updateAccountBalances() {
+        try {
+            // Path to the file
+           // String path = "src/userInfo";
+
+            // Read all lines from the file
+            List<String> lines = Files.readAllLines(Paths.get("src/userInfo"));
+            boolean found = false;
+
+            // Iterate over the lines to find the user
+            for (int i = 0; i < lines.size(); i += 5) { // Assuming each user's data spans 5 lines as per your reading logic
+                if (lines.get(i).equals(util.getUserName())) {
+                    // Update the checking and savings balances
+                    lines.set(i + 3, String.valueOf(checkingsAccount.getBalance()));
+                    lines.set(i + 4, String.valueOf(savingsAccount.checkBalance()));
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                // Write the updated content back to the file
+                Files.write(Paths.get("src/userInfo"), lines, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+                return true;
+            } else {
+                System.out.println("User not found.");
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to read or write to the file.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+    public static ArrayList<Bills> getBills(String filename) {
+        ArrayList<Bills> billsList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                int dueDate = Integer.parseInt(line);
+                double amount = Double.parseDouble(br.readLine());
+                boolean paid = Boolean.parseBoolean(br.readLine());
+                Bills bill = new Bills((int) amount, dueDate, paid);
+                billsList.add(bill);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return billsList;
     }
 
 }

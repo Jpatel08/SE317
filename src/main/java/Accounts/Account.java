@@ -7,8 +7,7 @@ public abstract class Account
     protected String userName;
     protected double balance;
 
-    public Account(int accountNumber, String userName, double balance) {
-        this.accountNumber = accountNumber;
+    public Account( String userName, double balance) {
         this.userName = userName;
         this.balance = balance;
     }
