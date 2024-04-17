@@ -1,10 +1,13 @@
+package Bills;
+
+import UtilitiesAccounts.Utilities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Bills {
-    @Id
-    int id;
+
 
     private int amount;
     private int dueDate;

@@ -1,4 +1,8 @@
-public class CheckingsAccount extends Account{
+package CheckingAccounts;
+
+import Accounts.Account;
+
+public class CheckingsAccount extends Account {
     double dailyDeposit = 0;
     double dailyWithdraw = 0;
    public CheckingsAccount(int accountNumber, String userName, double balance) {
@@ -13,7 +17,7 @@ public class CheckingsAccount extends Account{
         else{
             this.balance += amount;
             dailyDeposit += amount;
-            System.out.println("Succesfuly deposity " + amount + "into Checkings Account\n " +
+            System.out.println("Succesfuly deposity " + amount + "into Checkings Accounts.Account\n " +
                     "New Balance: "+ this.balance);
         }
     }

@@ -1,10 +1,8 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+package Accounts;
 
-@Entity
 public abstract class Account
 {
-    @Id
+
     protected int accountNumber;
     protected String userName;
     protected double balance;
@@ -51,7 +49,7 @@ public abstract class Account
 
     @Override
     public String toString() {
-        return "Account ID: " + accountNumber + ", User Name: " + userName + ", Balance: $" + balance;
+        return "Accounts.Account ID: " + accountNumber + ", User Name: " + userName + ", Balance: $" + balance;
     }
 }
 

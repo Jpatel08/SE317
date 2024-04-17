@@ -1,3 +1,7 @@
+package SavingsAccounts;
+
+import Accounts.Account;
+
 public class SavingsAccount extends Account{
     double dailyDeposit = 0;
     double dailyTransfer = 0;
@@ -17,7 +21,7 @@ public class SavingsAccount extends Account{
         else{
             this.balance += amount;
             dailyDeposit += amount;
-            System.out.println("Succesfuly deposity " + amount + "into Savings Account\n " +
+            System.out.println("Succesfuly deposity " + amount + "into Savings Accounts.Account\n " +
                     "New Balance: "+ this.balance);
         }
     }

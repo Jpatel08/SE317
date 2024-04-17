@@ -1,20 +1,11 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
+package UtilitiesAccounts;
 import java.util.List;
 import java.util.Random;
+import Bills.Bills;
 
-@Entity
 public class Utilities {
-    @Id
+
     int accountNumber;
-
-
-
-    @OneToMany
-private List<Bills> bills = new ArrayList<>();
 
 
     private String userName;
@@ -50,12 +41,6 @@ private List<Bills> bills = new ArrayList<>();
         this.userName = userName;
     }
 
-    public List<Bills> getBills() {
-        return bills;
-    }
 
-    public void setBills(List<Bills> bills) {
-        this.bills = bills;
-    }
 
 }
