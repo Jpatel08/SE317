@@ -13,10 +13,10 @@ public class Bills {
     private int dueDate;
     private boolean paid;
 
-    public Bills(int amount, int dueDate){
+    public Bills(int amount, int dueDate, boolean paid){
         this.amount = amount;
         this.dueDate = dueDate;
-        this.paid = false;
+        this.paid = paid;
     }
 
     public int getAmount() {

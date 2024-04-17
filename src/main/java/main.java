@@ -1,12 +1,14 @@
+import Bills.Bills;
 import CheckingAccounts.CheckingsAccount;
 import SavingsAccounts.SavingsAccount;
 import UtilitiesAccounts.Utilities;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.Bean;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
@@ -15,6 +17,12 @@ class Main {
    static SavingsAccount savingsAccount;
     static Utilities util;
     static int accountNumber = 0;
+    ArrayList<Bills> bills = getBills(billsFile);
+    static String billsFile = "/src/bills.txt";
+
+
+
+
 
     public static void main(String[] args) {
         init();
@@ -172,6 +180,8 @@ class Main {
         System.out.println("******Utilities Menu bruv******:");
         System.out.println("Press 1 to see last 3 bills bruv:");
         System.out.println("Press 2 to see your next bill bruv:");
+        System.out.println("Press 3 to up and leave this menu fam:");
+
         int choice = sc.nextInt();
 
         switch (choice) {
@@ -181,6 +191,8 @@ class Main {
             case 2:
                 utilSubMenu2();
                 break;
+            case 3:
+                mainloop();
             default:
                 System.out.println("Shite choice mandem");
                 break;
@@ -190,15 +202,44 @@ class Main {
 
 
     public static void utilSubMenu1(){
+        Scanner sc = new Scanner(System.in);
         System.out.flush();
-
-
-
-
+        System.out.println("Your last three bills fam:");
+        //utilities.getLastThreeBills();
+        System.out.println("press 1 to go back to the utilities menu bruv.");
+        int choice  = sc.nextInt();
+        if (choice == 1){
+            utilitiesMenu();
+        }
     }
-    public static void utilSubMenu2(){
+
+
+
+
+    public static void utilSubMenu2() {
         System.out.flush();
 
+        System.out.println("Your next bill fam:");
+
+        //System.out.println(util.getNextBill());
+        System.out.println("Would you like to pay this off? yes(1) or no (2):");
+        Scanner sc = new Scanner(System.in);
+        int choice = sc.nextInt();
+        switch (choice) {
+            case 1:
+                if (checkingsAccount.getBalance() >=1 ) {
+                    checkingsAccount.withdraw(/*util.getNextBill.amount() */ 1);
+                    //util.payBill();
+                    System.out.println("Big spenda activities, bill has been paid.");
+                    utilitiesMenu();
+
+                } else {
+                    System.out.println("Your a bum fam, insufficient bread activities.");
+                }
+            case 2:
+                utilitiesMenu();
+                break;
+        }
     }
 
 }
