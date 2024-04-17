@@ -40,5 +40,9 @@ public class SavingsAccount extends Account{
             toAccount.deposit(amount-this.balance); //transfers max amount I THINK
         }
     }
+    public void newDayBruv(){
+        dailyDeposit = 0;
+        dailyTransfer = 0;
+    }
 
 }

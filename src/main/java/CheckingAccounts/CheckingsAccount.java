@@ -39,4 +39,8 @@ public class CheckingsAccount extends Account {
            this.balance = 0;
        }
     }
+    public void newDayBruv(){
+        dailyDeposit = 0;
+        dailyWithdraw = 0;
+    }
 }

@@ -41,6 +41,12 @@ public class Utilities {
         this.userName = userName;
     }
 
+    public int getaccountNumber(){
+
+        return this.accountNumber;
+    }
+
+
 
 
 }
