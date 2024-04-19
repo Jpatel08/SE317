@@ -23,6 +23,11 @@ public class Utilities {
         this.password=password;
         this.accountNumber = generateRandomID();
     }
+    public Utilities(String userName, String password, int accountNumber){
+        this.userName = userName;
+        this.password=password;
+        this.accountNumber = accountNumber;
+    }
 
 
     public String getUserName() {

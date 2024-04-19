@@ -15,6 +15,7 @@ class Main {
    static CheckingsAccount checkingsAccount;
    static SavingsAccount savingsAccount;
     static Utilities util;
+    static ArrayList<Utilities> uList = new ArrayList<>();
     static int accountNumber = 0;
     static String billsFile = "src/bills.txt";
     static ArrayList<Bills> bills = getBills(billsFile);
@@ -28,6 +29,7 @@ class Main {
     public static void main(String[] args) {
         init();
         mainloop();
+        
 
     }
 
@@ -44,6 +46,7 @@ class Main {
 
         switch (choice) {
             case 1:
+                //utilCreate();
                 login();
                 break;
             case 2:
@@ -57,6 +60,19 @@ class Main {
         }
 
     }
+//    public void utilCreate()throws IOException{
+//
+//        //go through all the usernames and passwords in the txt file, create a new util object and add it to the array list
+//        List<String> lines = Files.readAllLines(Paths.get("src/userInfo"));
+//        for (int i = 0; i < lines.size(); i += 4) {
+//            if(lines.get(i).){
+//
+//            }
+//        }
+//
+//
+//
+//        }
 
     public static void login(){
         //prompt for user and password
@@ -72,6 +88,7 @@ class Main {
                 String username = sc.next();
                 System.out.println("enter password");
                 String password = sc.next();
+
                 authenticateUser(username,password, accountNumber);
                 break;
             case 2:
@@ -154,9 +171,21 @@ class Main {
                     break;
                 case 3:
                     utilitiesMenu();
+                    break;
+                case 4:
+                    newDayBruv();
+                    break;
+                default:
+                    System.out.println("Bad Choice bruv");
+                    break;
             }
 
+
         }
+    }
+    public static void newDayBruv(){
+        checkingsAccount.newDayBruv();
+        savingsAccount.newDayBruv();
     }
 
     public static void checkingMenu(){
