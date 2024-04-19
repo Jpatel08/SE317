@@ -1,0 +1,61 @@
+Jay Patel and Daniel Karpov
+jpatel02   dkarp16
+
+
+Lab 6 ATM:
+The zip already contains the data storage structure for the system,
+so there should be no need to modify filepaths to get the main menu to operate correctly
+To start, the user must first create a user by selecting the login option on startup.
+This will prompt the user to enter a username and password. The user can then login and access the atm menu
+
+UI:
+The UI is command line, all operations are done by entering a number corresponding to the menu options
+
+SUB MENUS:
+    Checking:
+        The checking menue allows the user to deposit, withdraw, transfer, update day, and exit
+        Deposit: the user is able to deposit up to 5000 with the user input
+        Withdraw: The user is able to withdraw 500 per day when selecting withdraw
+        Transfer: This allows the user to transfer money from their checking account to their savings account
+        Update day: simulates a day going by and allows the user to reset the daily limits in checking and savings
+
+    Savings:
+        Contains the deposit, transfer and exit choices,
+        Deposit: this submenu choice allows the user to deposit up to 5000 a day. If successful,
+        the UI will display a confirmation message and bring the user back.
+        Transfer: allows user to select amount to send to checkings.
+        Exit: exits the submenu.
+
+
+    Utility:
+        Contains the pay bills, see last three bills, and exit button.
+        Pay bills: allows option to see the next bill and pay using the checking balance if there is
+        sufficient funds.
+        Last 3 bills: Displays last three paid bills.
+        Exit: exits the submenu.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

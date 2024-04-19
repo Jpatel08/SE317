@@ -2,9 +2,8 @@ import Bills.Bills;
 import CheckingAccounts.CheckingsAccount;
 import SavingsAccounts.SavingsAccount;
 import UtilitiesAccounts.Utilities;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -17,8 +16,10 @@ class Main {
    static SavingsAccount savingsAccount;
     static Utilities util;
     static int accountNumber = 0;
-    ArrayList<Bills> bills = getBills(billsFile);
-    static String billsFile = "/src/bills.txt";
+    static String billsFile = "src/bills.txt";
+    static ArrayList<Bills> bills = getBills(billsFile);
+
+
 
 
 
@@ -182,6 +183,9 @@ class Main {
             case 4:
                 mainloop();
                 break;
+            default:
+                System.out.println("Bad Choice bruv");
+                break;
         }
 
     }
@@ -234,6 +238,9 @@ class Main {
             case 3:
                 mainloop();
                 break;
+            default:
+                System.out.println("Bad Choice bruv");
+                break;
         }
 
     }
@@ -275,7 +282,7 @@ class Main {
             case 3:
                 mainloop();
             default:
-                System.out.println("Shite choice mandem");
+                System.out.println("Bad choice bruv");
                 break;
         }
     }
@@ -286,12 +293,15 @@ class Main {
         Scanner sc = new Scanner(System.in);
         System.out.flush();
         System.out.println("Your last three bills fam:");
-        //utilities.getLastThreeBills();
+        lastThreeBills(bills);
         System.out.println("press 1 to go back to the utilities menu bruv.");
         int choice  = sc.nextInt();
         if (choice == 1){
             utilitiesMenu();
+        }else{
+                System.out.println("Bad Choice bruv");
         }
+
     }
 
 
@@ -301,8 +311,8 @@ class Main {
         System.out.flush();
 
         System.out.println("Your next bill fam:");
-
-        //System.out.println(util.getNextBill());
+        Bills unpaid  = getNextUnpaidBill(bills);
+        System.out.println("Balance due:"+unpaid.getAmount());
         System.out.println("Would you like to pay this off? yes(1) or no (2):");
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
@@ -310,7 +320,9 @@ class Main {
             case 1:
                 if (checkingsAccount.getBalance() >=1 ) {
                     checkingsAccount.withdraw(/*util.getNextBill.amount() */ 1);
-                    //util.payBill();
+                    payBill(bills,checkingsAccount);
+                    updateAccountBalances();
+                    updateFile(bills,billsFile);
                     System.out.println("Big spenda activities, bill has been paid.");
                     utilitiesMenu();
 
@@ -319,6 +331,9 @@ class Main {
                 }
             case 2:
                 utilitiesMenu();
+                break;
+            default:
+                System.out.println("Bad Choice bruv");
                 break;
         }
     }
@@ -359,7 +374,6 @@ class Main {
     }
 
 
-
     public static ArrayList<Bills> getBills(String filename) {
         ArrayList<Bills> billsList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -376,5 +390,65 @@ class Main {
         }
         return billsList;
     }
+
+
+    public static Bills getNextUnpaidBill(ArrayList<Bills> billsList) {
+        for (Bills bill : billsList) {
+            if (!bill.isPaid()) {
+                return bill;
+            }
+        }
+        return null; // If no unpaid bill found
+    }
+
+
+    public static void lastThreeBills(ArrayList<Bills> billsList) {
+        int countPaidBills = 0;
+        System.out.println("last Three Paid Bills:");
+        for (int i = 0; i < billsList.size() && countPaidBills < 3; i++) {
+            Bills bill = billsList.get(i);
+            if (bill.isPaid()) {
+                System.out.println("Due Date: " + bill.getDueDate() + ", Amount: $" + bill.getAmount());
+                countPaidBills++;
+            }
+        }
+        if (countPaidBills == 0) {
+            System.out.println("No paid bills found.");
+        }
+    }
+
+
+
+    public static void payBill(ArrayList<Bills> billsList, CheckingsAccount c) {
+       Bills b =  getNextUnpaidBill(billsList);
+        if (c.getBalance()>b.getAmount()){
+           c.withdraw(b.getAmount());
+           b.setPaid(true);
+           System.out.println("Bill paid off bruv.");
+
+       }else{
+           System.out.println("insufficient funds mandem.");
+       }
+
+    }
+
+
+    private static void updateFile(ArrayList<Bills> billsList, String billsFile) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(billsFile))) {
+            for (Bills bill : billsList) {
+                writer.write(Integer.toString(bill.getDueDate()));
+                writer.newLine();
+                writer.write(Double.toString(bill.getAmount()));
+                writer.newLine();
+                writer.write(Boolean.toString(bill.isPaid()));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
 }
